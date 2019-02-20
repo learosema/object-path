@@ -1,5 +1,7 @@
 # Get object property by path
 
+[![Build Status](https://travis-ci.org/terabaud/object-path.svg?branch=master)](https://travis-ci.org/terabaud/object-path)
+
 This method is inspired by https://github.com/skratchdot/object-path-get/blob/master/index.js but extended by array indexes.
 
 Example:
