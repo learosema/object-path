@@ -1,4 +1,4 @@
-const objectPathGet = require("./index.js");
+const objectPathGet = require("./index");
 
 const obj = {
   title: {
