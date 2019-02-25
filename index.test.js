@@ -38,6 +38,12 @@ test("gets object property by name from object", () => {
   expect(objectPathGet(obj, "title.year")).toBe("1977-2019");
 });
 
+test("gets object property by only using brackets notation", () => {
+  expect(objectPathGet(obj, '["people"]')).toBe(obj.people);
+  expect(objectPathGet(obj, "['people'][1]['name']")).toBe("Darth Vader");
+  expect(objectPathGet(obj, "['people'][1][\"name\"]")).toBe("Darth Vader");
+});
+
 test("gets object by array index", () => {
   expect(objectPathGet(obj, "people[1]")).toBe(obj.people[1]);
 });
@@ -47,15 +53,19 @@ test("gets object property by using an array index in path", () => {
   expect(objectPathGet(obj, "title.episodes[3].title")).toBe(
     "Episode IV - A New Hope"
   );
+  expect(objectPathGet(obj, "title.episodes[6]['title']")).toBe(
+    "Episode VII - The Force Awakens"
+  );
 });
 
 test("returns the specified default value if property does not exist", () => {
   expect(objectPathGet(obj, "people[1].age", "N/A")).toBe("N/A");
 });
 
-test("returns the specified default value if the provided array index in path is out of range", () => {
+test("returns the specified default value if the provided bracket expression is an index out of range or undefined property", () => {
   expect(objectPathGet(obj, "people[5]", "N/A")).toBe("N/A");
   expect(objectPathGet(obj, "people[-1]", "N/A")).toBe("N/A");
+  expect(objectPathGet(obj, "people[1]['hairColor']", "N/A")).toBe("N/A");
 });
 
 test("returns the specified default value if the provided array index not a number", () => {
@@ -69,9 +79,12 @@ test("returns the specified default value when trying to get a property of undef
 test("returns the specified default value when a property of a non-object type is requested", () => {
   expect(objectPathGet(obj, "people[0].name.constructor", "N/A")).toBe("N/A");
   expect(objectPathGet(obj, "title.name.toString", "N/A")).toBe("N/A");
+  expect(objectPathGet(obj, "title.name['toString']", "N/A")).toBe("N/A");
 });
 
 test("returns the specified default value when the provided path string is invalid", () => {
+  expect(objectPathGet(obj, "people.1", "N/A")).toBe("N/A");
+  expect(objectPathGet(obj, "people.[0]", "N/A")).toBe("N/A");
   expect(objectPathGet(obj, [], "N/A")).toBe("N/A");
   expect(objectPathGet(obj, "...", "N/A")).toBe("N/A");
   expect(objectPathGet(obj, '%§$R"$[2].§!$""§', "N/A")).toBe("N/A");
