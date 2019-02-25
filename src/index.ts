@@ -1,6 +1,10 @@
-const bracketParser = require("./bracket-parser");
+import bracketParser from "./bracket-parser";
 
-function objectPathGet(obj, path, defaultValue) {
+export default function objectPathGet(
+  obj: any,
+  path?: string,
+  defaultValue?: string
+): any {
   if (path === null || typeof path === "undefined" || path === "") {
     return obj;
   }
@@ -16,14 +20,14 @@ function objectPathGet(obj, path, defaultValue) {
       return defaultValue;
     }
     if (expr.var !== "") {
-      if (!iter || typeof iter !== "object" || !expr.var in iter) {
+      if (!iter || typeof iter !== "object" || !(expr.var in iter)) {
         return defaultValue;
       }
       iter = iter[expr.var];
     }
     for (let j = 0; j < expr.brackets.length; j++) {
-      let prop = expr.brackets[j];
-      if (!iter || typeof iter !== "object" || !prop in iter) {
+      let prop: string | number = expr.brackets[j];
+      if (!iter || typeof iter !== "object" || !(prop in iter)) {
         return defaultValue;
       }
       iter = iter[prop];
@@ -31,5 +35,3 @@ function objectPathGet(obj, path, defaultValue) {
   }
   return iter || defaultValue;
 }
-
-module.exports = objectPathGet;

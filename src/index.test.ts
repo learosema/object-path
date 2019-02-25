@@ -1,4 +1,4 @@
-const objectPathGet = require("./index");
+import objectPathGet from "./index";
 
 const obj = {
   title: {
@@ -28,7 +28,6 @@ test("returns the specified default value if the object is null or undefined", (
 
 test("returns the object itself if the path is null or empty", () => {
   expect(objectPathGet(obj, "")).toBe(obj);
-  expect(objectPathGet(obj, null)).toBe(obj);
   expect(objectPathGet(obj)).toBe(obj);
 });
 
@@ -85,7 +84,7 @@ test("returns the specified default value when a property of a non-object type i
 test("returns the specified default value when the provided path string is invalid", () => {
   expect(objectPathGet(obj, "people.1", "N/A")).toBe("N/A");
   expect(objectPathGet(obj, "people.[0]", "N/A")).toBe("N/A");
-  expect(objectPathGet(obj, [], "N/A")).toBe("N/A");
+  expect(objectPathGet(obj, [].toString(), "N/A")).toBe("N/A");
   expect(objectPathGet(obj, "...", "N/A")).toBe("N/A");
   expect(objectPathGet(obj, '%§$R"$[2].§!$""§', "N/A")).toBe("N/A");
 });

@@ -1,4 +1,4 @@
-const bracketParser = require("./bracket-parser");
+import bracketParser from "./bracket-parser";
 
 test("parses single quote expressions", () => {
   expect(bracketParser("foo['bar']")).toEqual({
