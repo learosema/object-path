@@ -1,3 +1,6 @@
+# Mac
+.DS_Store
+
 # Logs
 logs
 *.log
@@ -79,5 +82,3 @@ typings/
 # DynamoDB Local files
 .dynamodb/
 
-# Build output files
-dist
