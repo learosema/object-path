@@ -1,14 +1,18 @@
-const bracketParser = require("./bracket-parser");
+import bracketParser from "./bracket-parser";
 
-function objectPathGet(obj, path, defaultValue) {
+export default function objectPathGet(
+  obj: any,
+  path?: string | null,
+  defaultValue?: string
+): any {
   if (path === null || typeof path === "undefined" || path === "") {
     return obj;
   }
   if (typeof path !== "string") {
     return defaultValue;
   }
-  let iter = obj;
-  const pathSegments = path.split(".");
+  let iter: any = obj;
+  const pathSegments: Array<string> = path.split(".");
   for (let i = 0; i < pathSegments.length; i++) {
     let expr = bracketParser(pathSegments[i]);
     if (expr === null || (i > 0 && expr.var === "")) {
@@ -16,20 +20,19 @@ function objectPathGet(obj, path, defaultValue) {
       return defaultValue;
     }
     if (expr.var !== "") {
-      if (!iter || typeof iter !== "object" || !expr.var in iter) {
+      if (!iter || typeof iter !== "object" || !(expr.var in iter)) {
         return defaultValue;
       }
       iter = iter[expr.var];
     }
     for (let j = 0; j < expr.brackets.length; j++) {
-      let prop = expr.brackets[j];
-      if (!iter || typeof iter !== "object" || !prop in iter) {
+      let prop: string | number = expr.brackets[j];
+      if (!iter || typeof iter !== "object" || !(prop in iter)) {
         return defaultValue;
       }
       iter = iter[prop];
     }
   }
+
   return iter || defaultValue;
 }
-
-module.exports = objectPathGet;
