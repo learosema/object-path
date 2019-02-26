@@ -1,9 +1,16 @@
+interface BracketExpression {
+  var: string;
+  brackets: Array<string>;
+}
+
 /**
  * Parse bracket expression
  * @param {String} expression a path expression with brackets
  * @example > parseBracketExpression('hello[1]["world"]') returns { var: 'hello', brackets: [ 1, 'world'] }
  */
-export default function bracketParser(expression: string) {
+export default function bracketParser(
+  expression: string
+): BracketExpression | null {
   const patterns = {
     // variable expression, eg. foo
     var: "[a-zA-Z_\\$][\\$\\w]*",
@@ -38,7 +45,7 @@ export default function bracketParser(expression: string) {
         ? parseInt(str, 10)
         : str.slice(1, -1);
     };
-    return {
+    return <BracketExpression>{
       var: match[1],
       brackets: match[2].split(/\]\s*\[/).map(evaluation)
     };

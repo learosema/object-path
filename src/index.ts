@@ -2,7 +2,7 @@ import bracketParser from "./bracket-parser";
 
 export default function objectPathGet(
   obj: any,
-  path?: string,
+  path?: string | null,
   defaultValue?: string
 ): any {
   if (path === null || typeof path === "undefined" || path === "") {
@@ -11,8 +11,8 @@ export default function objectPathGet(
   if (typeof path !== "string") {
     return defaultValue;
   }
-  let iter = obj;
-  const pathSegments = path.split(".");
+  let iter: any = obj;
+  const pathSegments: Array<string> = path.split(".");
   for (let i = 0; i < pathSegments.length; i++) {
     let expr = bracketParser(pathSegments[i]);
     if (expr === null || (i > 0 && expr.var === "")) {
@@ -33,5 +33,6 @@ export default function objectPathGet(
       iter = iter[prop];
     }
   }
+
   return iter || defaultValue;
 }
