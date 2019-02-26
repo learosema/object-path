@@ -18,7 +18,8 @@ const obj = {
   },
   people: [
     { name: "Luke Skywalker", type: "jedi" },
-    { name: "Darth Vader", type: "sith" }
+    { name: "Darth Vader", type: "sith" },
+    { name: "Boba Fett", type: "" }
   ]
 };
 
@@ -26,9 +27,12 @@ test("returns the specified default value if the object is null or undefined", (
   expect(objectPathGet(null, "people[1].name", "N/A")).toBe("N/A");
 });
 
-test("returns the object itself if the path is null or empty", () => {
+test("returns the object itself if the path is null, undefined or empty", () => {
   expect(objectPathGet(obj, "")).toBe(obj);
   expect(objectPathGet(obj)).toBe(obj);
+  expect(objectPathGet(obj, null, "N/A")).toBe(obj);
+  expect(objectPathGet(obj, void 0, "N/A")).toBe(obj);
+  expect(objectPathGet("foo", "")).toBe("foo");
 });
 
 test("gets object property by name from object", () => {
@@ -71,6 +75,10 @@ test("returns the specified default value if the provided array index not a numb
   expect(objectPathGet(obj, "people[o]", "N/A")).toBe("N/A");
 });
 
+test("returns the specified default value if the provided property is falsy", () => {
+  expect(objectPathGet(obj, "people[2]['type']", "N/A")).toBe("N/A");
+});
+
 test("returns the specified default value when trying to get a property of undefined", () => {
   expect(objectPathGet(obj, "people[5].name", "N/A")).toBe("N/A");
 });
@@ -84,7 +92,6 @@ test("returns the specified default value when a property of a non-object type i
 test("returns the specified default value when the provided path string is invalid", () => {
   expect(objectPathGet(obj, "people.1", "N/A")).toBe("N/A");
   expect(objectPathGet(obj, "people.[0]", "N/A")).toBe("N/A");
-  expect(objectPathGet(obj, [].toString(), "N/A")).toBe("N/A");
   expect(objectPathGet(obj, "...", "N/A")).toBe("N/A");
   expect(objectPathGet(obj, '%§$R"$[2].§!$""§', "N/A")).toBe("N/A");
 });
